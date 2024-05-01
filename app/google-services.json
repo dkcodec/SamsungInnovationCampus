@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "58885606141",
+    "project_id": "dijob-aafbe",
+    "storage_bucket": "dijob-aafbe.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:58885606141:android:a53423f718785683548c94",
+        "android_client_info": {
+          "package_name": "com.example.careerup"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAE4xpzxCqMtVU2k815TNrKnp_j0FFWABw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
