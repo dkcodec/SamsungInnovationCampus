@@ -56,8 +56,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         // подключаю авториацию и нахожу по ID элементы которые буду менять
         auth = FirebaseAuth.getInstance();
-//        logOut = findViewById(R.id.logout);
-//        userName = findViewById(R.id.userName);
         // считаваю авторизован пользовтель или нет
         user = auth.getCurrentUser();
 
@@ -67,25 +65,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             startActivity(intent);
             finish();
         }
-//        else {
-//            // устанваливаю поле userName почтой пользователя
-////            userName.setText(user.getEmail());
-//        }
-
-//        //     Разлогирование при нажатии на logOut
-//        logOut.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//
-//                // Разлогирование пользователся с помощью Firebase
-//                FirebaseAuth.getInstance().signOut();
-//
-//                // переход на страницу Логин
-//                Intent intent = new Intent(getApplicationContext(), Login.class);
-//                startActivity(intent);
-//                finish();
-//            }
-//        });
 
         // -------------------Меню--------------------
         Toolbar toolbar = findViewById(R.id.Toolbar); //Ignore red line errors
@@ -130,57 +109,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         drawerLayout.closeDrawer(GravityCompat.START);
         return true;
     }
-
-//    public void getData(){
-//        try {
-//        okhttp3.Request request = new okhttp3.Request.Builder()
-//                .url("https://jsearch.p.rapidapi.com/search?query="+query+"&page="+page+"&num_pages=1")
-//                .get()
-//                .addHeader("X-RapidAPI-Key", "dce0f7fdd8msh5d7766376aa5b8fp1618abjsnb4d000b11660")
-//                .addHeader("X-RapidAPI-Host", "jsearch.p.rapidapi.com")
-//                .build();
-//            Response response = client.newCall(request).execute();
-//        } catch (IOException e) {
-//            throw new RuntimeException(e);
-//        }
-
-
-//        String url = "https://jsearch.p.rapidapi.com/search?query="+query+"&page="+page+"&num_pages=1";
-//
-//        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url,
-//                null, new Response.Listener<JSONObject>() {
-//            public void onResponse(JSONObject jsonObject) {
-//                try {
-//                    JSONArray jsonArray =jsonObject.getJSONArray("data");
-//                    for (int i=0;i<jsonArray.length();i++){
-//                        JSONObject jsonObject1 =jsonArray.getJSONObject(i);
-//                        String title, pictureUrl, category, instructions;
-//                        title= jsonObject1.getString("strDrink");
-//                        pictureUrl=jsonObject1.getString("strDrinkThumb");
-//                        category=jsonObject1.getString("strCategory");
-//                        instructions=jsonObject1.getString("strInstructions");
-//                        JobLS jobLS=new JobLS();
-//                        jobLS.setTitle(title);
-//                        jobLS.setCategory(category);
-//                        jobLS.setInstructions(instructions);
-//                        jobLS.setPictureUrl(pictureUrl);
-//                        jobLS.add(cocktail);
-//                        cocktailAdapter=new CocktailAdapter(MainActivity.this,cocktails);
-//                        recyclerView.setAdapter(cocktailAdapter);
-//                    }
-//                } catch (JSONException e) {
-//                    throw new RuntimeException(e);
-//                }
-//            }
-//        }, new Response.ErrorListener() {
-//            @Override
-//            public void onErrorResponse(VolleyError volleyError) {
-//                volleyError.printStackTrace();
-//            }
-//        }) ;
-//        requestQueue.add(request);
-//    }
-
     @Override
     public void onBackPressed() {
         if (drawerLayout.isDrawerOpen(GravityCompat.START)) {

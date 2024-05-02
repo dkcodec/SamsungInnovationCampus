@@ -143,8 +143,9 @@ public class JobLS {
     }
 
     public boolean isJob_is_remote() {
-        return job_is_remote;
+        return job_is_remote != null && job_is_remote.booleanValue();
     }
+
 
     public void setJob_is_remote(boolean job_is_remote) {
         this.job_is_remote = job_is_remote;

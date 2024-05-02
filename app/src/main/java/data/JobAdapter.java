@@ -59,21 +59,26 @@ public class JobAdapter extends RecyclerView.Adapter<JobAdapter.JobsViewHolder> 
         String pictureUrl= currentJob.getEmployer_logo();
         String country = currentJob.getJob_country();
         String city = currentJob.getJob_city();
-        Boolean isRemote = currentJob.isJob_is_remote();
+        String job_employment_type = currentJob.getJob_employment_type();
+        boolean isRemote = currentJob.isJob_is_remote();
 
         holder.job_title.setText(title);
+        holder.employer_name.setText(company);
+        holder.job_city.setText(city);
+        holder.job_country.setText(country);
+        holder.job_employment_type.setText(job_employment_type);
+        if (holder.employer_logo != null) {
+            Picasso.get()
+                    .load(pictureUrl)
+                    .placeholder(R.drawable.placeholder_job)
+                    .fit()
+                    .centerInside()
+                    .into(holder.employer_logo);
+        }
         if(isRemote)
             holder.job_is_remote.setText("Remote");
         else
             holder.job_is_remote.setText("On-site");
-        holder.employer_name.setText(company);
-        holder.job_city.setText(city);
-        holder.job_country.setText(country);
-
-        Picasso.get()
-                .load(pictureUrl)
-                .fit().centerInside()
-                .into(holder.employer_logo);
     }
 
     @Override
@@ -83,17 +88,17 @@ public class JobAdapter extends RecyclerView.Adapter<JobAdapter.JobsViewHolder> 
 
     public class JobsViewHolder extends RecyclerView.ViewHolder{
         ImageView employer_logo;
-        TextView job_title, employer_name, job_city, job_country, job_is_remote;
-
+        TextView job_title, employer_name, job_city, job_country, job_is_remote, job_employment_type;
 
         public JobsViewHolder(@NonNull View itemView) {
             super(itemView);
-            job_title=itemView.findViewById(R.id.titleTextView);
+            employer_logo = itemView.findViewById(R.id.pictureImageView);
+            job_title = itemView.findViewById(R.id.title);
             employer_name=itemView.findViewById(R.id.companyTextView);
-            job_country = itemView.findViewById(R.id.Country);
-            job_city=itemView.findViewById(R.id.City);
-            job_is_remote=itemView.findViewById(R.id.Remote);
+            job_country = itemView.findViewById(R.id.country);
+            job_city=itemView.findViewById(R.id.city);
+            job_is_remote=itemView.findViewById(R.id.remote);
+            job_employment_type = itemView.findViewById(R.id.jobEmploymentType);
         }
     }
-
 }
