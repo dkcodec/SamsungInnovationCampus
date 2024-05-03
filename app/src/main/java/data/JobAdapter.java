@@ -20,10 +20,20 @@ import model.JobLS;
 
 public class JobAdapter extends RecyclerView.Adapter<JobAdapter.JobsViewHolder> {
     private Context context;
+    private OnJobClickListener mListener;
     private ArrayList<JobLS> jobs;
     public JobAdapter(Context context, ArrayList<JobLS> jobs) {
         this.context = context;
         this.jobs = jobs;
+    }
+
+    public interface OnJobClickListener {
+        void onJobClick(int position);
+    }
+
+    // Метод для установки слушателя кликов
+    public void setOnJobClickListener(OnJobClickListener listener) {
+        mListener = listener;
     }
 
     public Context getContext() {

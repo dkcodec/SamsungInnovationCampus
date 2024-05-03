@@ -3,12 +3,14 @@ package com.example.careerup;
 import android.content.Context;
 import android.os.Bundle;
 
-import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.os.Parcelable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,7 +24,6 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
-import com.google.android.material.textfield.TextInputEditText;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -31,7 +32,6 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -39,7 +39,7 @@ import java.util.Map;
 import data.JobAdapter;
 import model.JobLS;
 
-public class HomeFragment extends Fragment{
+public class HomeFragment extends Fragment implements JobAdapter.OnJobClickListener{
     private Context mContext;
     private RecyclerView recyclerView;
     private JobAdapter jobAdapter;
@@ -90,6 +90,9 @@ public class HomeFragment extends Fragment{
         recyclerView.setHasFixedSize(true);
 
         jobAdapter = new JobAdapter(mContext, jobs);
+
+        jobAdapter.setOnJobClickListener(this);
+
         recyclerView.setAdapter(jobAdapter);
 
         return view;
@@ -110,7 +113,7 @@ public class HomeFragment extends Fragment{
                         try {
                             JSONArray jsonArray =response.getJSONArray("data");
                             for (int i=0;i<jsonArray.length();i++){
-                                JSONObject jsonObject1 =jsonArray.getJSONObject(i);
+                                JSONObject jsonObject1 = jsonArray.getJSONObject(i);
 
                                 String title, employer_logo, employer_name, city, country, type;
 
@@ -153,11 +156,27 @@ public class HomeFragment extends Fragment{
                     @Override
                     public Map<String, String> getHeaders() throws AuthFailureError {
                         Map<String, String> headers = new HashMap<>();
-                        headers.put("X-RapidAPI-Key", "dce0f7fdd8msh5d7766376aa5b8fp1618abjsnb4d000b11660");
+                        headers.put("X-RapidAPI-Key","dce0f7fdd8msh5d7766376aa5b8fp1618abjsnb4d000b11660");
                         headers.put("X-RapidAPI-Host", "jsearch.p.rapidapi.com");
                         return headers;
                     }
                 };
         requestQueue.add(request);
+    }
+
+    // Метод обратного вызова, который будет вызываться при клике на элемент списка
+    @Override
+    public void onJobClick(int position) {
+        // Открываем фрагмент JobPageFragment с помощью FragmentManager
+        FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+        JobPage fragment = new JobPage();
+        // Передаем данные о вакансии в фрагмент
+        Bundle bundle = new Bundle();
+        bundle.putParcelable("job", (Parcelable) jobs.get(position));
+        fragment.setArguments(bundle);
+        transaction.replace(R.id.fragment_container, fragment);
+        transaction.addToBackStack(null);
+        transaction.commit();
     }
 }
