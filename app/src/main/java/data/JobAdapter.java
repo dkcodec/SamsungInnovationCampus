@@ -20,20 +20,17 @@ import model.JobLS;
 
 public class JobAdapter extends RecyclerView.Adapter<JobAdapter.JobsViewHolder> {
     private Context context;
-    private OnJobClickListener mListener;
     private ArrayList<JobLS> jobs;
-    public JobAdapter(Context context, ArrayList<JobLS> jobs) {
+    private JobAdapter.OnJobClickListener mListener;
+
+    public JobAdapter(Context context, ArrayList<JobLS> jobs, JobAdapter.OnJobClickListener listener) {
         this.context = context;
         this.jobs = jobs;
+        this.mListener = listener;
     }
 
     public interface OnJobClickListener {
-        void onJobClick(int position);
-    }
-
-    // Метод для установки слушателя кликов
-    public void setOnJobClickListener(OnJobClickListener listener) {
-        mListener = listener;
+        void onJobClick(JobLS job);
     }
 
     public Context getContext() {
@@ -63,6 +60,7 @@ public class JobAdapter extends RecyclerView.Adapter<JobAdapter.JobsViewHolder> 
     @Override
     public void onBindViewHolder(@NonNull JobsViewHolder holder, int position) {
         JobLS currentJob = jobs.get(position);
+        final JobLS job = jobs.get(position);
 
         String title=currentJob.getJob_title();
         String company = currentJob.getEmployer_name();
@@ -89,6 +87,15 @@ public class JobAdapter extends RecyclerView.Adapter<JobAdapter.JobsViewHolder> 
             holder.job_is_remote.setText("Remote");
         else
             holder.job_is_remote.setText("On-site");
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mListener != null) {
+                    mListener.onJobClick(job);
+                }
+            }
+        });
     }
 
     @Override

@@ -6,11 +6,9 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.os.Parcelable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -39,7 +37,7 @@ import java.util.Map;
 import data.JobAdapter;
 import model.JobLS;
 
-public class HomeFragment extends Fragment implements JobAdapter.OnJobClickListener{
+public class HomeFragment extends Fragment implements JobAdapter.OnJobClickListener {
     private Context mContext;
     private RecyclerView recyclerView;
     private JobAdapter jobAdapter;
@@ -89,10 +87,7 @@ public class HomeFragment extends Fragment implements JobAdapter.OnJobClickListe
 
         recyclerView.setHasFixedSize(true);
 
-        jobAdapter = new JobAdapter(mContext, jobs);
-
-        jobAdapter.setOnJobClickListener(this);
-
+        jobAdapter = new JobAdapter(mContext, jobs, this);
         recyclerView.setAdapter(jobAdapter);
 
         return view;
@@ -113,7 +108,7 @@ public class HomeFragment extends Fragment implements JobAdapter.OnJobClickListe
                         try {
                             JSONArray jsonArray =response.getJSONArray("data");
                             for (int i=0;i<jsonArray.length();i++){
-                                JSONObject jsonObject1 = jsonArray.getJSONObject(i);
+                                JSONObject jsonObject1 =jsonArray.getJSONObject(i);
 
                                 String title, employer_logo, employer_name, city, country, type;
 
@@ -134,7 +129,7 @@ public class HomeFragment extends Fragment implements JobAdapter.OnJobClickListe
 
                                 jobs.add(job);
 
-                                jobAdapter = new JobAdapter(mContext,jobs);
+                                jobAdapter = new JobAdapter(mContext,jobs, this);
 
                                 recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
 
@@ -157,26 +152,68 @@ public class HomeFragment extends Fragment implements JobAdapter.OnJobClickListe
                     public Map<String, String> getHeaders() throws AuthFailureError {
                         Map<String, String> headers = new HashMap<>();
                         headers.put("X-RapidAPI-Key","dce0f7fdd8msh5d7766376aa5b8fp1618abjsnb4d000b11660");
-                        headers.put("X-RapidAPI-Host", "jsearch.p.rapidapi.com");
+                        headers.put("X-R`apidAPI-Host", "jsearch.p.rapidapi.com");
                         return headers;
                     }
                 };
         requestQueue.add(request);
     }
-
-    // Метод обратного вызова, который будет вызываться при клике на элемент списка
     @Override
-    public void onJobClick(int position) {
-        // Открываем фрагмент JobPageFragment с помощью FragmentManager
-        FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
-        FragmentTransaction transaction = fragmentManager.beginTransaction();
-        JobPage fragment = new JobPage();
-        // Передаем данные о вакансии в фрагмент
+    public void onJobClick(JobLS job) {
+        JobDetailsFragment fragment = new JobDetailsFragment();
+
+        // Создал Bundle для передачи данных в новый фрагмент
         Bundle bundle = new Bundle();
-        bundle.putParcelable("job", (Parcelable) jobs.get(position));
+        bundle.putString("job_title", job.getJob_title());
+        bundle.putString("employer_name", job.getEmployer_name());
+        bundle.putString("job_country", job.getJob_country());
+        bundle.putString("job_city", job.getJob_city());
+        bundle.putString("job_employment_type", job.getJob_employment_type());
+        bundle.putString("job_description", job.getJob_description());
+        bundle.putString("employer_logo", job.getEmployer_logo());
+        bundle.putString("job_is_remote", String.valueOf(job.isJob_is_remote()));
+
+        // работа с массивом квалификаций
+
+        try {
+            JSONObject jobHighlights = job.getJob_highlights();
+            JSONArray qualificationsArray = jobHighlights.getJSONArray("Qualifications");
+            JSONArray responsibilitiesArray = jobHighlights.getJSONArray("Responsibilities");
+            JSONArray benefitsArray = jobHighlights.getJSONArray("Benefits");
+
+            // Преобразование JSONArray в массивы строк
+            String[] qualifications = new String[qualificationsArray.length()];
+            String[] responsibilities = new String[responsibilitiesArray.length()];
+            String[] benefits = new String[benefitsArray.length()];
+
+            // Заполнение массивов строк
+            for (int i = 0; i < qualificationsArray.length(); i++) {
+                qualifications[i] = qualificationsArray.getString(i);
+            }
+            for (int i = 0; i < responsibilitiesArray.length(); i++) {
+                responsibilities[i] = responsibilitiesArray.getString(i);
+            }
+            for (int i = 0; i < benefitsArray.length(); i++) {
+                benefits[i] = benefitsArray.getString(i);
+            }
+
+            // Добавление массивов строк в Bundle
+            bundle.putStringArray("qualifications", qualifications);
+            bundle.putStringArray("responsibilities", responsibilities);
+            bundle.putStringArray("benefits", benefits);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        // Поставил бандл как аргумент
         fragment.setArguments(bundle);
-        transaction.replace(R.id.fragment_container, fragment);
-        transaction.addToBackStack(null);
-        transaction.commit();
+
+        // заменил фрагмент на новый
+        FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
+        fragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, fragment)
+                .addToBackStack(null)
+                .commit();
     }
+
 }

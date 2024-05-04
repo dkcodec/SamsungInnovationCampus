@@ -1,5 +1,7 @@
 package model;
 
+import org.json.JSONObject;
+
 import java.util.Date;
 
 public class JobLS {
@@ -35,7 +37,7 @@ public class JobLS {
     private Double job_max_salary;
     private String job_salary_currency;
     private String job_salary_period;
-    private String[] job_highlights;
+    private JSONObject job_highlights;
     private String[] job_responsibilities;
     private String job_job_title;
     private String job_posting_language;
@@ -303,11 +305,11 @@ public class JobLS {
         this.job_salary_period = job_salary_period;
     }
 
-    public String[] getJob_highlights() {
+    public JSONObject getJob_highlights() {
         return job_highlights;
     }
 
-    public void setJob_highlights(String[] job_highlights) {
+    public void setJob_highlights(JSONObject job_highlights) {
         this.job_highlights = job_highlights;
     }
 
