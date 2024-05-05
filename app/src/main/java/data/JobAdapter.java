@@ -2,6 +2,7 @@ package data;
 
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,6 +29,7 @@ public class JobAdapter extends RecyclerView.Adapter<JobAdapter.JobsViewHolder> 
         this.jobs = jobs;
         this.mListener = listener;
     }
+
 
     public interface OnJobClickListener {
         void onJobClick(JobLS job);
@@ -62,6 +64,18 @@ public class JobAdapter extends RecyclerView.Adapter<JobAdapter.JobsViewHolder> 
         JobLS currentJob = jobs.get(position);
         final JobLS job = jobs.get(position);
 
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d("JobAdapter", "Item clicked at position: " + position);
+                if (mListener != null) {
+                    mListener.onJobClick(job);
+                } else {
+                    Log.d("JobAdapter", "mListener is null");
+                }
+            }
+        });
+
         String title=currentJob.getJob_title();
         String company = currentJob.getEmployer_name();
         String pictureUrl= currentJob.getEmployer_logo();
@@ -87,15 +101,6 @@ public class JobAdapter extends RecyclerView.Adapter<JobAdapter.JobsViewHolder> 
             holder.job_is_remote.setText("Remote");
         else
             holder.job_is_remote.setText("On-site");
-
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (mListener != null) {
-                    mListener.onJobClick(job);
-                }
-            }
-        });
     }
 
     @Override

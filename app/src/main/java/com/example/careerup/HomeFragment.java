@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -83,7 +84,16 @@ public class HomeFragment extends Fragment implements JobAdapter.OnJobClickListe
 
         recyclerView = view.findViewById(R.id.RecyclerView); // Инициализация recyclerView
 
-        getJobs();
+        recyclerView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d("RecyclerView", "Clicked");
+            }
+        });
+
+        recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
+
+        getJobs(this);
 
         recyclerView.setHasFixedSize(true);
 
@@ -93,7 +103,7 @@ public class HomeFragment extends Fragment implements JobAdapter.OnJobClickListe
         return view;
     }
 
-    private void getJobs(){
+    private void getJobs(JobAdapter.OnJobClickListener listener){
         requestQueue= Volley.newRequestQueue(mContext);
 
         query = encodeURIComponent(query);
@@ -129,7 +139,7 @@ public class HomeFragment extends Fragment implements JobAdapter.OnJobClickListe
 
                                 jobs.add(job);
 
-                                jobAdapter = new JobAdapter(mContext,jobs, this);
+                                jobAdapter = new JobAdapter(mContext, jobs, listener);
 
                                 recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
 
@@ -160,7 +170,10 @@ public class HomeFragment extends Fragment implements JobAdapter.OnJobClickListe
     }
     @Override
     public void onJobClick(JobLS job) {
+        Log.d("JobAdapterr", "onJobClick() called");
         JobDetailsFragment fragment = new JobDetailsFragment();
+
+        Log.d("JobAdapter", "onJobClick: Starting...");
 
         // Создал Bundle для передачи данных в новый фрагмент
         Bundle bundle = new Bundle();
@@ -174,46 +187,39 @@ public class HomeFragment extends Fragment implements JobAdapter.OnJobClickListe
         bundle.putString("job_is_remote", String.valueOf(job.isJob_is_remote()));
 
         // работа с массивом квалификаций
-
+        JSONObject jobHighlights = job.getJob_highlights();
         try {
-            JSONObject jobHighlights = job.getJob_highlights();
-            JSONArray qualificationsArray = jobHighlights.getJSONArray("Qualifications");
-            JSONArray responsibilitiesArray = jobHighlights.getJSONArray("Responsibilities");
-            JSONArray benefitsArray = jobHighlights.getJSONArray("Benefits");
-
-            // Преобразование JSONArray в массивы строк
-            String[] qualifications = new String[qualificationsArray.length()];
-            String[] responsibilities = new String[responsibilitiesArray.length()];
-            String[] benefits = new String[benefitsArray.length()];
-
-            // Заполнение массивов строк
-            for (int i = 0; i < qualificationsArray.length(); i++) {
-                qualifications[i] = qualificationsArray.getString(i);
-            }
-            for (int i = 0; i < responsibilitiesArray.length(); i++) {
-                responsibilities[i] = responsibilitiesArray.getString(i);
-            }
-            for (int i = 0; i < benefitsArray.length(); i++) {
-                benefits[i] = benefitsArray.getString(i);
-            }
-
-            // Добавление массивов строк в Bundle
+            String[] qualifications = getStringArrayFromJSONArray(jobHighlights.getJSONArray("Qualifications"));
             bundle.putStringArray("qualifications", qualifications);
+            String[] responsibilities = getStringArrayFromJSONArray(jobHighlights.getJSONArray("Responsibilities"));
             bundle.putStringArray("responsibilities", responsibilities);
+            String[] benefits = getStringArrayFromJSONArray(jobHighlights.getJSONArray("Benefits"));
             bundle.putStringArray("benefits", benefits);
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
-        // Поставил бандл как аргумент
+        // Поставил аргументы в бандл
         fragment.setArguments(bundle);
 
         // заменил фрагмент на новый
-        FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
-        fragmentManager.beginTransaction()
-                .replace(R.id.fragment_container, fragment)
+        AppCompatActivity activity = (AppCompatActivity) mContext;
+        activity.getSupportFragmentManager().beginTransaction()
+                .replace(((ViewGroup)getView().getParent()).getId(), fragment)
                 .addToBackStack(null)
                 .commit();
+
+
+        Log.d("JobAdapter", "onJobClick: Fragment replaced successfully.");
+    }
+
+    // Метод для преобразования JSONArray в массив строк
+    private String[] getStringArrayFromJSONArray(JSONArray jsonArray) throws JSONException {
+        String[] stringArray = new String[jsonArray.length()];
+        for (int i = 0; i < jsonArray.length(); i++) {
+            stringArray[i] = jsonArray.getString(i);
+        }
+        return stringArray;
     }
 
 }

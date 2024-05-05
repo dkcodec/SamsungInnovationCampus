@@ -55,7 +55,7 @@ public class JobDetailsFragment extends Fragment {
             String employerName = bundle.getString("employer_name");
             String jobCountry = bundle.getString("job_country");
             String jobCity = bundle.getString("job_city");
-            String jobRemote = bundle.getString("job_is_remote");
+            boolean jobRemote = bundle.getBoolean("job_is_remote");
             String jobEmploymenttype = bundle.getString("job_employment_type");
             String employerLogo = bundle.getString("employer_logo");
             String desc = bundle.getString("job_description");
@@ -68,7 +68,7 @@ public class JobDetailsFragment extends Fragment {
             companyTextView.setText(employerName);
             country.setText(jobCountry);
             city.setText(jobCity);
-            if("true".equals(jobRemote)){
+            if(jobRemote){
                 remote.setText("Remote");
             } else{
                 remote.setText("On-site");
