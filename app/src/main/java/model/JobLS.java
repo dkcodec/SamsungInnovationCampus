@@ -1,5 +1,7 @@
 package model;
 
+import android.util.Log;
+
 import org.json.JSONObject;
 
 import java.util.Date;
@@ -306,6 +308,7 @@ public class JobLS {
     }
 
     public JSONObject getJob_highlights() {
+        Log.d("jobHighlights", "" + job_highlights);
         return job_highlights;
     }
 

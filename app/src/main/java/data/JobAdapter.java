@@ -1,6 +1,7 @@
 package data;
 
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -60,7 +61,7 @@ public class JobAdapter extends RecyclerView.Adapter<JobAdapter.JobsViewHolder> 
     }
 
     @Override
-    public void onBindViewHolder(@NonNull JobsViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull JobsViewHolder holder, @SuppressLint("RecyclerView") int position) {
         JobLS currentJob = jobs.get(position);
         final JobLS job = jobs.get(position);
 

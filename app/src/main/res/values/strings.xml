@@ -39,4 +39,8 @@
 
     <string name="apply">Apply</string>
 
+    <!-- Пагинация -->
+    <string name="prev"> &lt;- </string>
+    <string name="next"> -> </string>
+
 </resources>

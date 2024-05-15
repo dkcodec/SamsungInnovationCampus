@@ -5,6 +5,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatButton;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -14,6 +15,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -44,6 +46,9 @@ public class HomeFragment extends Fragment implements JobAdapter.OnJobClickListe
     private JobAdapter jobAdapter;
     private ArrayList<JobLS> jobs;
     private RequestQueue requestQueue;
+    private AppCompatButton prev, next;
+
+
 
     // ---------API----------------
     int page = 1;
@@ -84,10 +89,28 @@ public class HomeFragment extends Fragment implements JobAdapter.OnJobClickListe
 
         recyclerView = view.findViewById(R.id.RecyclerView); // Инициализация recyclerView
 
-        recyclerView.setOnClickListener(new View.OnClickListener() {
+        // Нахожу кнопки
+        prev = view.findViewById(R.id.prev);
+        next = view.findViewById(R.id.next);
+
+//        // для проверки карточки в ресайкл вью
+//        recyclerView.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Log.d("RecyclerView", "Clicked");
+//            }
+//        });
+        prev.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d("RecyclerView", "Clicked");
+                if(page > 0) {
+                    page--;
+                }
+                else
+                    if(page<10)
+                        Toast.makeText(getContext(), "Это первая страница", Toast.LENGTH_LONG);
+                    else
+                        Toast.makeText(getContext(), "Это последняя страница", Toast.LENGTH_LONG);
             }
         });
 
@@ -120,7 +143,8 @@ public class HomeFragment extends Fragment implements JobAdapter.OnJobClickListe
                             for (int i=0;i<jsonArray.length();i++){
                                 JSONObject jsonObject1 =jsonArray.getJSONObject(i);
 
-                                String title, employer_logo, employer_name, city, country, type;
+                                String title, employer_logo, employer_name, city, country, type, desc, apply;
+
 
                                 title = jsonObject1.getString("job_title");
                                 country = jsonObject1.getString("job_country");
@@ -128,14 +152,19 @@ public class HomeFragment extends Fragment implements JobAdapter.OnJobClickListe
                                 employer_logo = jsonObject1.getString("employer_logo");
                                 employer_name = jsonObject1.getString("employer_name");
                                 type = jsonObject1.getString("job_employment_type");
+                                desc = jsonObject1.getString("job_description");
+                                apply = jsonObject1.getString("job_apply_link");
 
                                 JobLS job = new JobLS();
+                                job.setJob_apply_link(apply);
                                 job.setJob_city(city);
                                 job.setJob_country(country);
                                 job.setJob_title(title);
                                 job.setEmployer_logo(employer_logo);
                                 job.setEmployer_name(employer_name);
                                 job.setJob_employment_type(type);
+                                job.setJob_description(desc);
+
 
                                 jobs.add(job);
 
@@ -157,15 +186,15 @@ public class HomeFragment extends Fragment implements JobAdapter.OnJobClickListe
                         // Обработка ошибки
                     }
                 })
-                {
-                    @Override
-                    public Map<String, String> getHeaders() throws AuthFailureError {
-                        Map<String, String> headers = new HashMap<>();
-                        headers.put("X-RapidAPI-Key","dce0f7fdd8msh5d7766376aa5b8fp1618abjsnb4d000b11660");
-                        headers.put("X-R`apidAPI-Host", "jsearch.p.rapidapi.com");
-                        return headers;
-                    }
-                };
+        {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> headers = new HashMap<>();
+                headers.put("X-RapidAPI-Key","dce0f7fdd8msh5d7766376aa5b8fp1618abjsnb4d000b11660");
+                headers.put("X-RapidAPI-Host", "jsearch.p.rapidapi.com");
+                return headers;
+            }
+        };
         requestQueue.add(request);
     }
     @Override
@@ -177,6 +206,7 @@ public class HomeFragment extends Fragment implements JobAdapter.OnJobClickListe
 
         // Создал Bundle для передачи данных в новый фрагмент
         Bundle bundle = new Bundle();
+        bundle.putString("job_apply_link", job.getJob_apply_link());
         bundle.putString("job_title", job.getJob_title());
         bundle.putString("employer_name", job.getEmployer_name());
         bundle.putString("job_country", job.getJob_country());
@@ -185,19 +215,6 @@ public class HomeFragment extends Fragment implements JobAdapter.OnJobClickListe
         bundle.putString("job_description", job.getJob_description());
         bundle.putString("employer_logo", job.getEmployer_logo());
         bundle.putString("job_is_remote", String.valueOf(job.isJob_is_remote()));
-
-        // работа с массивом квалификаций
-        JSONObject jobHighlights = job.getJob_highlights();
-        try {
-            String[] qualifications = getStringArrayFromJSONArray(jobHighlights.getJSONArray("Qualifications"));
-            bundle.putStringArray("qualifications", qualifications);
-            String[] responsibilities = getStringArrayFromJSONArray(jobHighlights.getJSONArray("Responsibilities"));
-            bundle.putStringArray("responsibilities", responsibilities);
-            String[] benefits = getStringArrayFromJSONArray(jobHighlights.getJSONArray("Benefits"));
-            bundle.putStringArray("benefits", benefits);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
 
         // Поставил аргументы в бандл
         fragment.setArguments(bundle);
@@ -211,15 +228,6 @@ public class HomeFragment extends Fragment implements JobAdapter.OnJobClickListe
 
 
         Log.d("JobAdapter", "onJobClick: Fragment replaced successfully.");
-    }
-
-    // Метод для преобразования JSONArray в массив строк
-    private String[] getStringArrayFromJSONArray(JSONArray jsonArray) throws JSONException {
-        String[] stringArray = new String[jsonArray.length()];
-        for (int i = 0; i < jsonArray.length(); i++) {
-            stringArray[i] = jsonArray.getString(i);
-        }
-        return stringArray;
     }
 
 }

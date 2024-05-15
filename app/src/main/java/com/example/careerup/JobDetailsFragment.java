@@ -1,11 +1,15 @@
 package com.example.careerup;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatButton;
@@ -39,18 +43,10 @@ public class JobDetailsFragment extends Fragment {
         descTitleTextView = view.findViewById(R.id.descTitleTextView);
         descTextView = view.findViewById(R.id.descTextView);
 
-        responseTitleTextView = view.findViewById(R.id.responseTitleTextView);
-        responseTextView = view.findViewById(R.id.responseTextView);
-
-        qualificationsTitleTextView = view.findViewById(R.id.qualificationsTitleTextView);
-        qualificationsTextView = view.findViewById(R.id.qualificationsTextView);
-
-        benifTitleTextView = view.findViewById(R.id.benifTitleTextView);
-        benifTextView = view.findViewById(R.id.benifTextView);
-
         // Получаем данные о работе из аргументов
         Bundle bundle = getArguments();
         if (bundle != null) {
+            String applyLink = bundle.getString("job_apply_link");
             String jobTitle = bundle.getString("job_title");
             String employerName = bundle.getString("employer_name");
             String jobCountry = bundle.getString("job_country");
@@ -59,18 +55,15 @@ public class JobDetailsFragment extends Fragment {
             String jobEmploymenttype = bundle.getString("job_employment_type");
             String employerLogo = bundle.getString("employer_logo");
             String desc = bundle.getString("job_description");
-            String[] qualifications = bundle.getStringArray("qualifications");
-            String[] responsibilities = bundle.getStringArray("responsibilities");
-            String[] benefits = bundle.getStringArray("benefits");
 
             // Устанавливаем данные в TextView
             title.setText(jobTitle);
             companyTextView.setText(employerName);
             country.setText(jobCountry);
             city.setText(jobCity);
-            if(jobRemote){
+            if (jobRemote) {
                 remote.setText("Remote");
-            } else{
+            } else {
                 remote.setText("On-site");
             }
 
@@ -86,38 +79,44 @@ public class JobDetailsFragment extends Fragment {
                         .into(pictureImageView);
             }
 
-            // Устанавливаем данные о квалификациях, обязанностях и преимуществах
-            if (qualifications != null && qualifications.length > 0) {
-                setTextViewFromArray(qualificationsTitleTextView, qualificationsTextView, "Qualifications", qualifications);
-            }
-            if (responsibilities != null && responsibilities.length > 0) {
-                setTextViewFromArray(responseTitleTextView, responseTextView, "Responsibilities", responsibilities);
-            }
-            if (benefits != null && benefits.length > 0) {
-                setTextViewFromArray(benifTitleTextView, benifTextView, "Benefits", benefits);
-            }
+
+            // Работа с кнопками Apply
+            apply.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // Обработка нажатия на кнопку apply
+                    // Создаем Intent с действием ACTION_VIEW и передаем в него ссылку
+                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(applyLink));
+
+                    // Проверяем, есть ли приложение, которое может обработать Intent
+                    if (intent.resolveActivity(getActivity().getPackageManager()) != null) {
+                        // Если есть, запускаем Intent
+                        startActivity(intent);
+                    } else {
+                        // Если нет, выводим уведомление, что нет приложения для открытия ссылки
+                        Toast.makeText(getActivity(), "No application available to open the link", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
+
+            apply2.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // Обработка нажатия на кнопку apply2
+                    // Создаем Intent с действием ACTION_VIEW и передаем в него ссылку
+                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(applyLink));
+
+                    // Проверяем, есть ли приложение, которое может обработать Intent
+                    if (intent.resolveActivity(getActivity().getPackageManager()) != null) {
+                        // Если есть, запускаем Intent
+                        startActivity(intent);
+                    } else {
+                        // Если нет, выводим уведомление, что нет приложения для открытия ссылки
+                        Toast.makeText(getActivity(), "No application available to open the link", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
         }
         return view;
     }
-    private void setTextViewFromArray(TextView titleTextView, TextView contentTextView, String title, String[] contentArray) {
-        // Проверяю, есть ли данные
-        if (contentArray != null && contentArray.length > 0) {
-            // Устанавливаю заголовок
-            titleTextView.setText(title);
-
-            // Создаю строку из массива данных
-            StringBuilder stringBuilder = new StringBuilder();
-            for (String item : contentArray) {
-                stringBuilder.append("\u2022 ").append(item).append("\n");
-            }
-
-            // Устанавливаю данные в соответствующий TextView
-            contentTextView.setText(stringBuilder.toString().trim());
-        } else {
-            // Если данных нет, скрываю соответствующие TextView
-            titleTextView.setVisibility(View.GONE);
-            contentTextView.setVisibility(View.GONE);
-        }
-    }
-
 }
