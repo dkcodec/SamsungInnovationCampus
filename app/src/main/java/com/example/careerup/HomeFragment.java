@@ -15,7 +15,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -25,6 +25,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.android.material.textfield.TextInputEditText;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -46,13 +47,18 @@ public class HomeFragment extends Fragment implements JobAdapter.OnJobClickListe
     private JobAdapter jobAdapter;
     private ArrayList<JobLS> jobs;
     private RequestQueue requestQueue;
+
+    // --------------- Pagination -----------
     private AppCompatButton prev, next;
-
-
 
     // ---------API----------------
     int page = 1;
     String query = "Frontend developer in new york";
+    static boolean isFormated = false;
+
+    // ------------- Серч -------------
+    private TextInputEditText searchInput = null;
+    private ImageButton buttonSearch;
 
     // ------------Кодировка для URL в ютф 8 чтоб сервер понимал
     public static String encodeURIComponent(String s) {
@@ -60,16 +66,18 @@ public class HomeFragment extends Fragment implements JobAdapter.OnJobClickListe
         try {
             result = URLEncoder.encode(s, "UTF-8")
                     .replaceAll("\\+", "%20")
-                    .replaceAll("\\%21", "!")
-                    .replaceAll("\\%27", "'")
-                    .replaceAll("\\%28", "(")
-                    .replaceAll("\\%29", ")")
-                    .replaceAll("\\%7E", "~");
+                    .replaceAll("\\%21", "%21")
+                    .replaceAll("\\%27", "%27")
+                    .replaceAll("\\%28", "%28")
+                    .replaceAll("\\%29", "%29")
+                    .replaceAll("\\%7E", "%7E");
         } catch (UnsupportedEncodingException e) {
             result = s;
         }
+        isFormated = true;
         return result;
     }
+
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
@@ -93,6 +101,10 @@ public class HomeFragment extends Fragment implements JobAdapter.OnJobClickListe
         prev = view.findViewById(R.id.prev);
         next = view.findViewById(R.id.next);
 
+        // нахожу серч
+        searchInput = view.findViewById(R.id.search_input);
+        buttonSearch = view.findViewById(R.id.search_button);
+
 //        // для проверки карточки в ресайкл вью
 //        recyclerView.setOnClickListener(new View.OnClickListener() {
 //            @Override
@@ -100,51 +112,75 @@ public class HomeFragment extends Fragment implements JobAdapter.OnJobClickListe
 //                Log.d("RecyclerView", "Clicked");
 //            }
 //        });
-        prev.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(page > 0) {
-                    page--;
-                }
-                else
-                    if(page<10)
-                        Toast.makeText(getContext(), "Это первая страница", Toast.LENGTH_LONG);
-                    else
-                        Toast.makeText(getContext(), "Это последняя страница", Toast.LENGTH_LONG);
-            }
-        });
 
         recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
-
-        getJobs(this);
 
         recyclerView.setHasFixedSize(true);
 
         jobAdapter = new JobAdapter(mContext, jobs, this);
         recyclerView.setAdapter(jobAdapter);
 
+        buttonSearch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                query = String.valueOf(searchInput.getText());
+                isFormated = false;
+
+                getJobs();
+
+                Log.d("SEARCH_QUERY: ", query);
+            }
+        });
+
+        prev.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (page > 1) {
+                    page--;
+                    getJobs();
+                    Log.d("PAGE: ", String.valueOf(page));
+                } else {
+                    Toast.makeText(mContext, "This is the first page", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+        next.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                page++;
+                getJobs();
+                Log.d("PAGE: ", String.valueOf(page));
+            }
+        });
+
+        getJobs();
+
         return view;
     }
 
-    private void getJobs(JobAdapter.OnJobClickListener listener){
-        requestQueue= Volley.newRequestQueue(mContext);
+    private void getJobs() {
+        requestQueue = Volley.newRequestQueue(mContext);
 
-        query = encodeURIComponent(query);
-        Log.println(Log.INFO,"HELLO: ","HEllO " + query);
+        if (!isFormated)
+            query = encodeURIComponent(query);
+
+        Log.println(Log.INFO, "HELLO: ", "HEllO " + query);
 
         String url = "https://jsearch.p.rapidapi.com/search?query=" + query + "&page=" + page + "&num_pages=1";
+        Log.d("REQUEST URL: ", url);  // Log the request URL
+
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
                 new Response.Listener<JSONObject>() {
                     public void onResponse(JSONObject response) {
-                        // Обработка ответа от сервера и добавление данных в список jobs
-                        // Обновление RecyclerView после получения данных
                         try {
-                            JSONArray jsonArray =response.getJSONArray("data");
-                            for (int i=0;i<jsonArray.length();i++){
-                                JSONObject jsonObject1 =jsonArray.getJSONObject(i);
+                            jobs.clear(); // Clear the list
+                            Log.d("RESPONSE: ", response.toString());  // Log the full response
+                            JSONArray jsonArray = response.getJSONArray("data");
+                            for (int i = 0; i < jsonArray.length(); i++) {
+                                JSONObject jsonObject1 = jsonArray.getJSONObject(i);
 
                                 String title, employer_logo, employer_name, city, country, type, desc, apply;
-
 
                                 title = jsonObject1.getString("job_title");
                                 country = jsonObject1.getString("job_country");
@@ -157,7 +193,10 @@ public class HomeFragment extends Fragment implements JobAdapter.OnJobClickListe
 
                                 JobLS job = new JobLS();
                                 job.setJob_apply_link(apply);
-                                job.setJob_city(city);
+                                if (city != "null")
+                                    job.setJob_city(city);
+                                else
+                                    job.setJob_city("");
                                 job.setJob_country(country);
                                 job.setJob_title(title);
                                 job.setEmployer_logo(employer_logo);
@@ -165,16 +204,11 @@ public class HomeFragment extends Fragment implements JobAdapter.OnJobClickListe
                                 job.setJob_employment_type(type);
                                 job.setJob_description(desc);
 
-
                                 jobs.add(job);
-
-                                jobAdapter = new JobAdapter(mContext, jobs, listener);
-
-                                recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
-
-                                recyclerView.setAdapter(jobAdapter);
                             }
+                            jobAdapter.notifyDataSetChanged(); // Notify adapter of new data
                         } catch (JSONException e) {
+                            Log.e("JSON ERROR: ", e.getMessage());  // Log JSON error
                             throw new RuntimeException(e);
                         }
                     }
@@ -182,21 +216,21 @@ public class HomeFragment extends Fragment implements JobAdapter.OnJobClickListe
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
+                        Log.e("VOLLEY ERROR: ", error.getMessage());  // Log Volley error
                         Toast.makeText(mContext, "Fail to get data..", Toast.LENGTH_SHORT).show();
-                        // Обработка ошибки
                     }
-                })
-        {
+                }) {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String, String> headers = new HashMap<>();
-                headers.put("X-RapidAPI-Key","dce0f7fdd8msh5d7766376aa5b8fp1618abjsnb4d000b11660");
+                headers.put("X-RapidAPI-Key", "f5b7ad29aemshd54e3b82f28e666p13f679jsn053d129bc9de");
                 headers.put("X-RapidAPI-Host", "jsearch.p.rapidapi.com");
                 return headers;
             }
         };
         requestQueue.add(request);
     }
+
     @Override
     public void onJobClick(JobLS job) {
         Log.d("JobAdapterr", "onJobClick() called");

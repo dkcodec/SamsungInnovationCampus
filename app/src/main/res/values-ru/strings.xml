@@ -1,0 +1,61 @@
+
+<resources>
+    <string name="app_name">CareerUp</string>
+
+    <!--    Register / Login    -->
+
+    <string name="login">Войти</string>
+    <string name="register">Зарегистрироваться</string>
+    <string name="email">Почта</string>
+    <string name="password">Пароль</string>
+    <string name="signup">Зарегистрироваться</string>
+    <string name="signin">Войти</string>
+    <string name="toLogin">Нажми чтобы войти</string>
+    <string name="toRegister">Нажми чтобы зарегистрироваться</string>
+
+    <string name="logout">Выйти</string>
+    <string name="userName">Имя пользователя</string>
+
+    <!--   Menu     -->
+
+    <string name="search">Поиск</string>
+    <string name="vacanciesandSearch">Поиск вакансии</string>
+    <string name="aboutUs">О нас</string>
+    <string name="open_nav">Запуск навигации</string>
+    <string name="close_nav">Конец навигации</string>
+    <string name="hello_blank_fragment">Пустой фрагмент</string>
+
+    <!-- JobPage -->
+    <string name="desc">Описание</string>
+    <string name="qualific">Квалификация</string>
+    <string name="respons">Обязаности</string>
+    <string name="benifits">Преимущества</string>
+
+    <string name="lorem">Lorem ipsum dolor sit amet consectetur adipisicing elit. Id cupiditate
+      placeat vitae quis atque quisquam inventore adipisci. Explicabo aut optio
+      id odit laudantium inventore. Delectus tempora ea maiores hic adipisci
+      placeat nesciunt, sint possimus quas numquam culpa dolor, facere vero
+      saepe autem temporibus aliquid similique vitae. Cumque atque sit velit.</string>
+
+    <string name="apply">Отклик</string>
+
+    <!-- Пагинация -->
+    <string name="prev"> &lt;- </string>
+    <string name="next"> -> </string>
+
+    <!-- Вкладка о нас -->
+    <string name="aboutCareerUp">О CareerUp</string>
+    <string name="aboutUsDesc">CareerUp: Инновационный опыт поиска работы</string>
+    <string name="aboutUsDesc1">Созданное Каиргельдиным Дмитрием и Мухаметжановой Кариной, приложение CareerUp - это новаторский мобильный сервис, предназначенный для революции в процессе поиска работы. Приложение собирает объявления о вакансиях со всех крупных сайтов по трудоустройству на одной удобной платформе, экономя ваше время и усилия. С CareerUp у вас есть доступ к полной информации о каждой вакансии и возможность откликнуться на нее прямо через приложение.</string>
+    <string name="aboutUsDesc2">Удобный интерфейс и мощные поисковые возможности CareerUp позволяют легко найти идеальную работу, соответствующую вашим навыкам и предпочтениям. Оставайтесь впереди на своем карьерном пути с обновлениями в реальном времени и персонализированными рекомендациями вакансий. Независимо от того, являетесь ли вы выпускником или опытным профессионалом, CareerUp оптимизирует процесс поиска работы, делая его эффективным и без стрессов.</string>
+    <string name="aboutUsDesc3">Примите будущее поиска работы с CareerUp – все возможности в одном месте.</string>
+    <string name="helpLink">Полезные ссылки</string>
+    <string name="figma">Figma</string>
+    <string name="inst">Instagram</string>
+    <string name="tg">Telegram</string>
+    <string name="webSite">WebSite</string>
+
+
+
+
+</resources>

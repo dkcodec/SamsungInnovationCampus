@@ -4,12 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:showIn = "navigation_view">
     <group android:checkableBehavior="single">
-        <item android:id="@+id/search"
-            android:icon="@drawable/search_icon"
-            android:title="@string/search"/>
         <item android:id="@+id/vacancies"
-            android:icon="@drawable/vacancies_icon"
-            android:title="@string/vacancies"/>
+            android:icon="@drawable/search_icon"
+            android:title="@string/vacanciesandSearch"/>
         <item android:id="@+id/about"
             android:icon="@drawable/book_icon"
             android:title="@string/aboutUs"/>

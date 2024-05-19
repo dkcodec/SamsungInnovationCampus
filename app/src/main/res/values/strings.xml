@@ -1,3 +1,5 @@
+
+
 <resources>
     <string name="app_name">CareerUp</string>
 
@@ -18,11 +20,10 @@
     <!--   Menu     -->
 
     <string name="search">Search</string>
-    <string name="vacancies">Vacancies</string>
+    <string name="vacanciesandSearch">Search vacancy</string>
     <string name="aboutUs">About Us</string>
     <string name="open_nav">Open Navigation Drawer</string>
     <string name="close_nav">Close Navigation Drawer</string>
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
     <!-- JobPage -->
@@ -42,5 +43,18 @@
     <!-- Пагинация -->
     <string name="prev"> &lt;- </string>
     <string name="next"> -> </string>
+
+
+    <!-- Вкладка о нас -->
+    <string name="aboutCareerUp">About CareerUp</string>
+    <string name="aboutUsDesc">CareerUp: Innovating Your Job Search Experience</string>
+    <string name="aboutUsDesc1">Created by Kairgeldin Dmitriy and Mukhametzhanova Karina, CareerUp is a groundbreaking mobile application designed to revolutionize the way you search for jobs. The app aggregates job listings from all major employment websites into one convenient platform, saving you time and effort. With CareerUp, you have access to comprehensive information on each job posting and the ability to apply directly through the app.</string>
+    <string name="aboutUsDesc2">CareerUp`s user-friendly interface and powerful search capabilities make it easy to find the perfect job that matches your skills and preferences. Stay ahead in your career journey with real-time updates and personalized job recommendations. Whether you are a fresh graduate or an experienced professional, CareerUp streamlines the job search process, making it efficient and stress-free.</string>
+    <string name="aboutUsDesc3">Embrace the future of job hunting with CareerUp – where all opportunities meet in one place.</string>
+    <string name="helpLink">Helpful links</string>
+    <string name="figma">Figma</string>
+    <string name="inst">Instagram</string>
+    <string name="tg">Telegram</string>
+    <string name="webSite">WebSite</string>
 
 </resources>

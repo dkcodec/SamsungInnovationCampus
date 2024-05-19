@@ -14,6 +14,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.example.careerup.R;
 import com.squareup.picasso.Picasso;
@@ -21,7 +23,7 @@ import com.squareup.picasso.Picasso;
 public class JobDetailsFragment extends Fragment {
     private ImageView pictureImageView;
     private AppCompatButton apply, apply2;
-    private TextView title, companyTextView, country, city, remote, jobEmploymentType, descTitleTextView, descTextView, responseTitleTextView, responseTextView, qualificationsTitleTextView, qualificationsTextView, benifTitleTextView, benifTextView;
+    private TextView title, companyTextView, country, city, remote, jobEmploymentType, descTextView;
 
     @Nullable
     @Override
@@ -40,7 +42,6 @@ public class JobDetailsFragment extends Fragment {
         apply = view.findViewById(R.id.apply);
         apply2 = view.findViewById(R.id.apply2);
 
-        descTitleTextView = view.findViewById(R.id.descTitleTextView);
         descTextView = view.findViewById(R.id.descTextView);
 
         // Получаем данные о работе из аргументов
@@ -60,7 +61,10 @@ public class JobDetailsFragment extends Fragment {
             title.setText(jobTitle);
             companyTextView.setText(employerName);
             country.setText(jobCountry);
-            city.setText(jobCity);
+            if(jobCity!= "null")
+                city.setText(jobCity);
+            else
+                city.setText("");
             if (jobRemote) {
                 remote.setText("Remote");
             } else {
@@ -81,39 +85,48 @@ public class JobDetailsFragment extends Fragment {
 
 
             // Работа с кнопками Apply
+
             apply.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    // Обработка нажатия на кнопку apply
-                    // Создаем Intent с действием ACTION_VIEW и передаем в него ссылку
-                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(applyLink));
+                    // Replace the current fragment with ApplyFragment
+                    ApplyFragment fragment = new ApplyFragment();
+                    Bundle bundle = new Bundle();
+                    bundle.putString("url", applyLink);
+                    fragment.setArguments(bundle);
 
-                    // Проверяем, есть ли приложение, которое может обработать Intent
-                    if (intent.resolveActivity(getActivity().getPackageManager()) != null) {
-                        // Если есть, запускаем Intent
-                        startActivity(intent);
-                    } else {
-                        // Если нет, выводим уведомление, что нет приложения для открытия ссылки
-                        Toast.makeText(getActivity(), "No application available to open the link", Toast.LENGTH_SHORT).show();
-                    }
+                    // Get the FragmentManager and start a FragmentTransaction
+                    FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                    FragmentTransaction transaction = fragmentManager.beginTransaction();
+
+                    // Replace the current fragment with ApplyFragment
+                    transaction.replace(R.id.fragment_container, fragment);
+                    transaction.addToBackStack(null); // Optional, to allow back navigation
+                    transaction.commit();
                 }
             });
+
 
             apply2.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     // Обработка нажатия на кнопку apply2
                     // Создаем Intent с действием ACTION_VIEW и передаем в него ссылку
-                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(applyLink));
+                    ApplyFragment fragment = new ApplyFragment();
+                    Bundle bundle = new Bundle();
+                    bundle.putString("url", applyLink);
+                    fragment.setArguments(bundle);
 
-                    // Проверяем, есть ли приложение, которое может обработать Intent
-                    if (intent.resolveActivity(getActivity().getPackageManager()) != null) {
-                        // Если есть, запускаем Intent
-                        startActivity(intent);
-                    } else {
-                        // Если нет, выводим уведомление, что нет приложения для открытия ссылки
-                        Toast.makeText(getActivity(), "No application available to open the link", Toast.LENGTH_SHORT).show();
-                    }
+                    // получаю другой фрагмент
+                    FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                    FragmentTransaction transaction = fragmentManager.beginTransaction();
+
+                    // Запускаю изменение фрагмента на фрагмент с webView
+                    transaction.replace(R.id.fragment_container, fragment);
+
+                    // для навигации назад
+                    transaction.addToBackStack(null);
+                    transaction.commit();
                 }
             });
         }
