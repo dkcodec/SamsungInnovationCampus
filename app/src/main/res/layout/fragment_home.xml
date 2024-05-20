@@ -12,6 +12,7 @@
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="70dp"
@@ -19,15 +20,14 @@
         app:layout_constraintBottom_toTopOf="@+id/RecyclerView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-
         app:layout_constraintTop_toTopOf="parent">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/search_input"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/comfortaa"
             android:background="@android:color/transparent"
+            android:fontFamily="@font/comfortaa"
             android:hint="Frontend developer in New York..."
             android:textColor="@color/white"
             android:textColorHint="@color/white"
@@ -59,6 +59,17 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="85dp"
+        android:layout_height="133dp"
+        android:layout_centerInParent="true"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@+id/RecyclerView"
+        app:layout_constraintEnd_toEndOf="@+id/RecyclerView"
+        app:layout_constraintStart_toStartOf="@+id/RecyclerView"
+        app:layout_constraintTop_toTopOf="@+id/RecyclerView" />
+
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/prev"
         android:layout_width="wrap_content"
@@ -81,6 +92,19 @@
         android:textColor="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/RecyclerView" />
+
+    <TextView
+        android:id="@+id/pageNumber"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/page"
+        android:textColor="@color/white"
+        android:fontFamily="@font/comfortaa_bold"
+        android:textSize="20dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/next"
+        app:layout_constraintStart_toEndOf="@+id/prev"
         app:layout_constraintTop_toBottomOf="@+id/RecyclerView" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

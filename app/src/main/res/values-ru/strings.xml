@@ -42,6 +42,7 @@
     <!-- Пагинация -->
     <string name="prev"> &lt;- </string>
     <string name="next"> -> </string>
+    <string name="page">1</string>
 
     <!-- Вкладка о нас -->
     <string name="aboutCareerUp">О CareerUp</string>

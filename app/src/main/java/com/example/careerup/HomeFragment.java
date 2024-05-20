@@ -16,6 +16,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -47,9 +49,12 @@ public class HomeFragment extends Fragment implements JobAdapter.OnJobClickListe
     private JobAdapter jobAdapter;
     private ArrayList<JobLS> jobs;
     private RequestQueue requestQueue;
+        // для показа загрузки пока данные не подтянулись в reyclerview
+    private ProgressBar progressBar;
 
     // --------------- Pagination -----------
     private AppCompatButton prev, next;
+    private TextView pageNumber;
 
     // ---------API----------------
     int page = 1;
@@ -95,11 +100,15 @@ public class HomeFragment extends Fragment implements JobAdapter.OnJobClickListe
 
         jobs = new ArrayList<>();
 
-        recyclerView = view.findViewById(R.id.RecyclerView); // Инициализация recyclerView
+        // Инициализация recyclerView и прогрессбара для него
+        recyclerView = view.findViewById(R.id.RecyclerView);
+        progressBar = view.findViewById(R.id.progressBar);
 
-        // Нахожу кнопки
+        // Нахожу кнопки ( ПАГИНАЦИЯ )
         prev = view.findViewById(R.id.prev);
         next = view.findViewById(R.id.next);
+        pageNumber = view.findViewById(R.id.pageNumber);
+        pageNumber.setText(String.valueOf(page));
 
         // нахожу серч
         searchInput = view.findViewById(R.id.search_input);
@@ -124,33 +133,43 @@ public class HomeFragment extends Fragment implements JobAdapter.OnJobClickListe
             @Override
             public void onClick(View v) {
                 query = String.valueOf(searchInput.getText());
+                // убираю форматирование текста
                 isFormated = false;
+                // обновляю номер страницы
+                page = 1;
+
+                // отобразил стр
+                pageNumber.setText(String.valueOf(page));
 
                 getJobs();
-
-                Log.d("SEARCH_QUERY: ", query);
             }
         });
 
+        // при клике уменьшаю перехожу на предидущую стр
         prev.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (page > 1) {
                     page--;
+                    pageNumber.setText(String.valueOf(page));
                     getJobs();
-                    Log.d("PAGE: ", String.valueOf(page));
                 } else {
                     Toast.makeText(mContext, "This is the first page", Toast.LENGTH_SHORT).show();
                 }
             }
         });
 
+        // при клике перехожу на некст стр
         next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                page++;
-                getJobs();
-                Log.d("PAGE: ", String.valueOf(page));
+                if (page < 10) {
+                    page++;
+                    pageNumber.setText(String.valueOf(page));
+                    getJobs();
+                } else {
+                    Toast.makeText(mContext, "This is the last page", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
@@ -159,8 +178,11 @@ public class HomeFragment extends Fragment implements JobAdapter.OnJobClickListe
         return view;
     }
 
+    // Работа с апишкой, кидаю запрос, получаю данные, вывожу их
     private void getJobs() {
+        progressBar.setVisibility(View.VISIBLE);
         requestQueue = Volley.newRequestQueue(mContext);
+
 
         if (!isFormated)
             query = encodeURIComponent(query);
@@ -206,10 +228,14 @@ public class HomeFragment extends Fragment implements JobAdapter.OnJobClickListe
 
                                 jobs.add(job);
                             }
-                            jobAdapter.notifyDataSetChanged(); // Notify adapter of new data
+                            jobAdapter.notifyDataSetChanged(); // Обновляю данные
                         } catch (JSONException e) {
-                            Log.e("JSON ERROR: ", e.getMessage());  // Log JSON error
+                            Log.e("JSON ERROR: ", e.getMessage());
                             throw new RuntimeException(e);
+                        } finally {
+                            // finally выполняется всегда после try catch
+                            // Скрываю ProgressBar
+                            progressBar.setVisibility(View.GONE);
                         }
                     }
                 },
@@ -218,6 +244,8 @@ public class HomeFragment extends Fragment implements JobAdapter.OnJobClickListe
                     public void onErrorResponse(VolleyError error) {
                         Log.e("VOLLEY ERROR: ", error.getMessage());  // Log Volley error
                         Toast.makeText(mContext, "Fail to get data..", Toast.LENGTH_SHORT).show();
+                        // при ошибке тоже скрываю
+                        progressBar.setVisibility(View.GONE);
                     }
                 }) {
             @Override
@@ -231,6 +259,7 @@ public class HomeFragment extends Fragment implements JobAdapter.OnJobClickListe
         requestQueue.add(request);
     }
 
+    // для подробной информации при клике на блок с работой откроется фрагмент с всей инфой
     @Override
     public void onJobClick(JobLS job) {
         Log.d("JobAdapterr", "onJobClick() called");
