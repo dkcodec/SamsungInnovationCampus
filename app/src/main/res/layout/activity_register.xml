@@ -7,7 +7,7 @@
     android:gravity="center"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Login"
+    tools:context=".Activities.Login"
     android:fontFamily = "@font/comfortaa"
     android:background="@color/bg"
     >
@@ -72,6 +72,7 @@
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btn_register"
+        android:fontFamily="@font/comfortaa_bold"
         android:layout_marginLeft="40dp"
         android:layout_marginRight="40dp"
         android:layout_width="match_parent"
@@ -81,6 +82,7 @@
         android:layout_marginBottom="40dp"/>
 
     <TextView
+        android:fontFamily="@font/comfortaa"
         android:id="@+id/loginNow"
         android:text="@string/toLogin"
         android:textSize="15sp"

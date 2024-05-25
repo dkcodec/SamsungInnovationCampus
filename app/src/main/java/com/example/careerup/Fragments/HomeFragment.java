@@ -1,4 +1,4 @@
-package com.example.careerup;
+package com.example.careerup.Fragments;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -7,7 +7,6 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -27,13 +26,19 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.careerup.R;
 import com.google.android.material.textfield.TextInputEditText;
+
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
@@ -49,8 +54,13 @@ public class HomeFragment extends Fragment implements JobAdapter.OnJobClickListe
     private JobAdapter jobAdapter;
     private ArrayList<JobLS> jobs;
     private RequestQueue requestQueue;
-        // для показа загрузки пока данные не подтянулись в reyclerview
+
+    // для показа загрузки пока данные не подтянулись в reyclerview
     private ProgressBar progressBar;
+
+    // --------- FireBase ---------
+    private FirebaseAuth mAuth;
+    private FirebaseUser currentUser;
 
     // --------------- Pagination -----------
     private AppCompatButton prev, next;
@@ -91,6 +101,10 @@ public class HomeFragment extends Fragment implements JobAdapter.OnJobClickListe
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        FirebaseApp.initializeApp(mContext);
+        mAuth = FirebaseAuth.getInstance();
+        currentUser = mAuth.getCurrentUser();
+        Log.d("FirebaseInitialization", "Firebase initialized");
     }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -202,8 +216,9 @@ public class HomeFragment extends Fragment implements JobAdapter.OnJobClickListe
                             for (int i = 0; i < jsonArray.length(); i++) {
                                 JSONObject jsonObject1 = jsonArray.getJSONObject(i);
 
-                                String title, employer_logo, employer_name, city, country, type, desc, apply;
+                                String title, employer_logo, employer_name, city, country, type, desc, apply, id;
 
+                                id = jsonObject1.getString("job_id");
                                 title = jsonObject1.getString("job_title");
                                 country = jsonObject1.getString("job_country");
                                 city = jsonObject1.getString("job_city");
@@ -214,6 +229,7 @@ public class HomeFragment extends Fragment implements JobAdapter.OnJobClickListe
                                 apply = jsonObject1.getString("job_apply_link");
 
                                 JobLS job = new JobLS();
+                                job.setJob_id(id);
                                 job.setJob_apply_link(apply);
                                 if (city != "null")
                                     job.setJob_city(city);
@@ -228,7 +244,8 @@ public class HomeFragment extends Fragment implements JobAdapter.OnJobClickListe
 
                                 jobs.add(job);
                             }
-                            jobAdapter.notifyDataSetChanged(); // Обновляю данные
+                            // Обновляю данные
+                            jobAdapter.notifyDataSetChanged();
                         } catch (JSONException e) {
                             Log.e("JSON ERROR: ", e.getMessage());
                             throw new RuntimeException(e);
@@ -263,12 +280,17 @@ public class HomeFragment extends Fragment implements JobAdapter.OnJobClickListe
     @Override
     public void onJobClick(JobLS job) {
         Log.d("JobAdapterr", "onJobClick() called");
+
+        // Сохраняю данные в Firebase RealTimeDataBase
+        saveJobToFirebase(job, String.valueOf(currentUser.getEmail()));
+
         JobDetailsFragment fragment = new JobDetailsFragment();
 
         Log.d("JobAdapter", "onJobClick: Starting...");
 
         // Создал Bundle для передачи данных в новый фрагмент
         Bundle bundle = new Bundle();
+        bundle.putString("job_id", job.getJob_id());
         bundle.putString("job_apply_link", job.getJob_apply_link());
         bundle.putString("job_title", job.getJob_title());
         bundle.putString("employer_name", job.getEmployer_name());
@@ -291,6 +313,41 @@ public class HomeFragment extends Fragment implements JobAdapter.OnJobClickListe
 
 
         Log.d("JobAdapter", "onJobClick: Fragment replaced successfully.");
+    }
+    // сохранение данных для истории в FireBase 2ая база данных
+    private void saveJobToFirebase(JobLS job, String email) {
+        FirebaseDatabase database = FirebaseDatabase.getInstance("https://dijob-aafbe-default-rtdb.europe-west1.firebasedatabase.app");
+        DatabaseReference usersRef = database.getReference("jobs");
+        Log.d("REF", usersRef.toString());
+
+        String emailKey = email.replace(".", ",");
+        Log.d("EMAIL", emailKey);
+
+        // Создаем HashMap для хранения информации о работе
+        Map<String, Object> jobData = new HashMap<>();
+        jobData.put("job_id", job.getJob_id());
+        jobData.put("job_apply_link", job.getJob_apply_link());
+        jobData.put("job_title", job.getJob_title());
+        jobData.put("employer_name", job.getEmployer_name());
+        jobData.put("job_country", job.getJob_country());
+        jobData.put("job_city", job.getJob_city());
+        jobData.put("job_employment_type", job.getJob_employment_type());
+        jobData.put("job_description", job.getJob_description());
+        jobData.put("employer_logo", job.getEmployer_logo());
+        jobData.put("job_is_remote", job.isJob_is_remote());
+
+        // Логи для отладки
+        Log.d("FirebaseJOB", "Job data: " + jobData.toString());
+
+        // Сохраняем информацию о работе под job_id
+        usersRef.child(emailKey).child(job.getJob_id()).setValue(jobData)
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        Log.d("FirebaseJOB", "Job saved successfully");
+                    } else {
+                        Log.e("FirebaseJOB", "Failed to save job", task.getException());
+                    }
+                });
     }
 
 }

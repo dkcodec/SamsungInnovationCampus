@@ -2,6 +2,7 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="grwhite">#A1A1A1</color>
 
     <color name="bg">#0E1317</color>
     <color name="menu_header">#3A5278</color>

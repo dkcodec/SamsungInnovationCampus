@@ -1,8 +1,7 @@
-package com.example.careerup;
+package com.example.careerup.Activities;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
@@ -14,28 +13,18 @@ import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
 
+import com.example.careerup.Fragments.AboutFragment;
+import com.example.careerup.Fragments.HomeFragment;
+import com.example.careerup.Fragments.ObservedFragment;
+import com.example.careerup.Fragments.ProfileFragment;
+import com.example.careerup.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 import androidx.annotation.NonNull;
 import androidx.core.view.GravityCompat;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.navigation.NavigationView;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
-
-import model.JobLS;
-import okhttp3.*;
 
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
@@ -96,6 +85,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new HomeFragment()).commit();
         } else if (id == R.id.about) {
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new AboutFragment()).commit();
+        } else if (id == R.id.profile){
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new ProfileFragment()).commit();
+        } else if (id == R.id.history){
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new ObservedFragment()).commit();
         } else if (id == R.id.logout) {
             // Выход из аккаунта при выборе пункта "Logout"
             FirebaseAuth.getInstance().signOut();

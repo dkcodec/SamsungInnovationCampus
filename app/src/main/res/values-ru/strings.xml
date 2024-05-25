@@ -24,6 +24,8 @@
     <string name="open_nav">Запуск навигации</string>
     <string name="close_nav">Конец навигации</string>
     <string name="hello_blank_fragment">Пустой фрагмент</string>
+    <string name="profile">Профиль</string>
+
 
     <!-- JobPage -->
     <string name="desc">Описание</string>
@@ -57,6 +59,29 @@
     <string name="webSite">WebSite</string>
 
 
+    <!-- Вкладка профиля -->
+    <string name="nameProfile">Ваше ФИО</string>
+    <string name="emailProfile">karina@gmial.com</string>
+    <string name="passProfile">Смена пароля:</string>
+    <string name="mobileProfile">Телефон:</string>
+    <string name="addressProfile">Адрес:</string>
+    <string name="postalCodeProfile">Почтовый код:</string>
+    <string name="editProfile">Редактировать</string>
+    <string name="saveProfile">Сохранить</string>
+    <string name="address">Мангелик Ел 50</string>
+    <string name="postalCode">10001</string>
+    <string name="mobile">87010868788</string>
+
+
+    <!-- История просмотра -->
+    <string name="history">Итсория</string>
+
+
+
+    <!-- ТОСТЫ -->
+    <string name="reauthenticated">Пользователь повторно авторизован с новым паролем</string>
+    <string name="ERreauthenticated">Не удалось выполнить повторную аутентификацию с новым паролем</string>
+    <string name="ERpass">Ошибка обновления пароля</string>
 
 
 </resources>

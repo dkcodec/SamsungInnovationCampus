@@ -10,6 +10,12 @@
         <item android:id="@+id/about"
             android:icon="@drawable/book_icon"
             android:title="@string/aboutUs"/>
+        <item android:id="@+id/history"
+            android:icon="@drawable/history"
+            android:title="@string/history"/>
+        <item android:id="@+id/profile"
+            android:icon="@drawable/profile"
+            android:title="@string/profile"/>
     </group>
     <item android:title="">
         <menu>

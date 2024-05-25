@@ -1,0 +1,319 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bg"
+    tools:context=".Fragments.ProfileFragment">
+
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:backgroundTint="@color/bg"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="1.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="360dp"
+                        android:background="@drawable/profile_top_bg"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent">
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <de.hdodenhof.circleimageview.CircleImageView
+                        android:id="@+id/profile_image"
+                        android:layout_width="100dp"
+                        android:layout_height="100dp"
+                        android:layout_marginTop="80dp"
+                        android:src="@drawable/placeholder_job"
+                        app:civ_border_color="@color/firstGrad"
+                        app:civ_border_width="2dp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <EditText
+                        android:id="@+id/nameProfile"
+                        android:layout_width="wrap_content"
+                        android:layout_height="0dp"
+                        android:background="@android:color/transparent"
+                        android:inputType="none"
+                        android:focusable="false"
+                        android:focusableInTouchMode="false"
+                        android:layout_marginTop="16dp"
+                        android:fontFamily="@font/comfortaa_bold"
+                        android:gravity="center"
+                        android:hint="@string/nameProfile"
+                        android:textColorHint="@color/grwhite"
+                        android:textColor="@color/white"
+                        android:textSize="20sp"
+                        app:layout_constraintEnd_toEndOf="@+id/profile_image"
+                        app:layout_constraintStart_toStartOf="@+id/profile_image"
+                        app:layout_constraintTop_toBottomOf="@+id/profile_image" />
+
+                    <TextView
+                        android:id="@+id/emailProfile"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:fontFamily="@font/comfortaa"
+                        android:gravity="center"
+                        android:text="@string/emailProfile"
+                        android:textColor="@color/white"
+                        android:textSize="15sp"
+                        app:layout_constraintEnd_toEndOf="@+id/nameProfile"
+                        app:layout_constraintStart_toStartOf="@+id/nameProfile"
+                        app:layout_constraintTop_toBottomOf="@+id/nameProfile" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="300dp"
+                        android:layout_marginStart="24dp"
+                        android:layout_marginTop="40dp"
+                        android:layout_marginEnd="24dp"
+                        android:background="@drawable/profile_bottom_bg"
+                        android:elevation="3dp"
+                        android:orientation="vertical"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/emailProfile">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="vertical"
+                            android:layout_margin="25dp">
+
+                            <androidx.constraintlayout.widget.ConstraintLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent">
+
+                                <androidx.constraintlayout.widget.ConstraintLayout
+                                    android:id="@+id/passwordConstaraint"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toTopOf="parent">
+
+                                    <TextView
+                                        android:id="@+id/passwordProfile"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:fontFamily="@font/comfortaa_bold"
+                                        android:text="@string/passProfile"
+                                        android:textColor="@color/white"
+                                        android:textSize="20sp"
+                                        app:layout_constraintStart_toStartOf="parent"
+                                        app:layout_constraintTop_toTopOf="parent" />
+
+                                    <EditText
+                                        android:id="@+id/passData"
+                                        android:inputType="textPassword"
+                                        android:focusable="false"
+                                        android:focusableInTouchMode="false"
+                                        android:background="@android:color/transparent"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:fontFamily="@font/comfortaa"
+                                        android:hint="@string/password"
+                                        android:gravity="end"
+                                        android:textColorHint="@color/grwhite"
+                                        android:textColor="@color/white"
+                                        android:textSize="20sp"
+                                        app:layout_constraintEnd_toEndOf="parent"
+                                        app:layout_constraintTop_toTopOf="parent" />
+
+                                    <View
+                                        android:id="@+id/view"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="1dp"
+                                        android:layout_marginTop="2dp"
+                                        android:background="@color/firstGrad"
+                                        app:layout_constraintStart_toStartOf="parent"
+                                        app:layout_constraintTop_toBottomOf="@+id/passwordProfile" />
+
+
+                                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                                <androidx.constraintlayout.widget.ConstraintLayout
+                                    android:id="@+id/mobileConstraint"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="34dp"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toBottomOf="@+id/passwordConstaraint">
+
+                                    <TextView
+                                        android:id="@+id/mobileProfile"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:fontFamily="@font/comfortaa_bold"
+                                        android:text="@string/mobileProfile"
+                                        android:textColor="@color/white"
+                                        android:textSize="20sp"
+                                        app:layout_constraintStart_toStartOf="parent"
+                                        app:layout_constraintTop_toTopOf="parent" />
+
+                                    <EditText
+                                        android:id="@+id/mobileDATA"
+                                        android:inputType="none"
+                                        android:focusable="false"
+                                        android:focusableInTouchMode="false"
+                                        android:background="@android:color/transparent"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:fontFamily="@font/comfortaa"
+                                        android:hint="@string/mobile"
+                                        android:gravity="end"
+                                        android:textColorHint="@color/grwhite"
+                                        android:textColor="@color/white"
+                                        android:textSize="20sp"
+                                        app:layout_constraintEnd_toEndOf="parent"
+                                        app:layout_constraintTop_toTopOf="parent" />
+
+                                    <View
+                                        android:layout_width="match_parent"
+                                        android:layout_height="1dp"
+                                        android:layout_marginTop="2dp"
+                                        android:background="@color/firstGrad"
+                                        app:layout_constraintStart_toStartOf="parent"
+                                        app:layout_constraintTop_toBottomOf="@+id/mobileProfile" />
+
+                                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                                <androidx.constraintlayout.widget.ConstraintLayout
+                                    android:id="@+id/addressConstraint"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="34dp"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toBottomOf="@+id/mobileConstraint">
+
+                                    <TextView
+                                        android:id="@+id/addressProfile"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:fontFamily="@font/comfortaa_bold"
+                                        android:text="@string/addressProfile"
+                                        android:textColor="@color/white"
+                                        android:textSize="20sp"
+                                        app:layout_constraintStart_toStartOf="parent"
+                                        app:layout_constraintTop_toTopOf="parent" />
+
+                                    <EditText
+                                        android:id="@+id/addressDATA"
+                                        android:inputType="none"
+                                        android:focusable="false"
+                                        android:focusableInTouchMode="false"
+                                        android:background="@android:color/transparent"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:fontFamily="@font/comfortaa"
+                                        android:hint="@string/address"
+                                        android:gravity="end"
+                                        android:textColorHint="@color/grwhite"
+                                        android:textColor="@color/white"
+                                        android:textSize="20sp"
+                                        app:layout_constraintEnd_toEndOf="parent"
+                                        app:layout_constraintTop_toTopOf="parent" />
+
+                                    <View
+                                        android:layout_width="match_parent"
+                                        android:layout_height="1dp"
+                                        android:layout_marginTop="2dp"
+                                        android:background="@color/firstGrad"
+                                        app:layout_constraintStart_toStartOf="parent"
+                                        app:layout_constraintTop_toBottomOf="@+id/addressProfile" />
+
+
+                                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                                <androidx.constraintlayout.widget.ConstraintLayout
+                                    android:id="@+id/postalCodeConstraint"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="34dp"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toBottomOf="@+id/addressConstraint">
+
+                                    <TextView
+                                        android:id="@+id/postalCodeProfile"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:fontFamily="@font/comfortaa_bold"
+                                        android:text="@string/postalCodeProfile"
+                                        android:textColor="@color/white"
+                                        android:textSize="20sp"
+                                        app:layout_constraintStart_toStartOf="parent"
+                                        app:layout_constraintTop_toTopOf="parent"/>
+
+
+                                    <EditText
+                                        android:id="@+id/postalCodeData"
+                                        android:inputType="none"
+                                        android:focusable="false"
+                                        android:focusableInTouchMode="false"
+                                        android:background="@android:color/transparent"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:fontFamily="@font/comfortaa"
+                                        android:hint="@string/postalCode"
+                                        android:gravity="end"
+                                        android:textColorHint="@color/grwhite"
+                                        android:textColor="@color/white"
+                                        android:textSize="20sp"
+                                        app:layout_constraintEnd_toEndOf="parent"
+                                        app:layout_constraintTop_toTopOf="parent" />
+
+                                    <View
+                                        android:layout_width="match_parent"
+                                        android:layout_height="1dp"
+                                        android:layout_marginTop="2dp"
+                                        android:background="@color/firstGrad"
+                                        app:layout_constraintStart_toStartOf="parent"
+                                        app:layout_constraintTop_toBottomOf="@+id/postalCodeProfile" />
+                                </androidx.constraintlayout.widget.ConstraintLayout>
+                            </androidx.constraintlayout.widget.ConstraintLayout>
+                        </LinearLayout>
+                    </LinearLayout>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btn_edit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/gradient"
+                android:textColor="@color/white"
+                android:fontFamily="@font/comfortaa_bold"
+                android:layout_margin="24dp"
+                android:text="@string/editProfile" />
+        </LinearLayout>
+    </ScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
