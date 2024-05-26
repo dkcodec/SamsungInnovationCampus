@@ -25,6 +25,7 @@
         android:id="@+id/historyProgressBar"
         style="?android:attr/progressBarStyle"
         android:layout_width="wrap_content"
+        android:visibility="gone"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="@+id/historyRecyclerView"
         app:layout_constraintEnd_toEndOf="@+id/historyRecyclerView"

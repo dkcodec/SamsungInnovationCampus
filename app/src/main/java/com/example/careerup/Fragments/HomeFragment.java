@@ -104,7 +104,6 @@ public class HomeFragment extends Fragment implements JobAdapter.OnJobClickListe
         FirebaseApp.initializeApp(mContext);
         mAuth = FirebaseAuth.getInstance();
         currentUser = mAuth.getCurrentUser();
-        Log.d("FirebaseInitialization", "Firebase initialized");
     }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -314,6 +313,7 @@ public class HomeFragment extends Fragment implements JobAdapter.OnJobClickListe
 
         Log.d("JobAdapter", "onJobClick: Fragment replaced successfully.");
     }
+
     // сохранение данных для истории в FireBase 2ая база данных
     private void saveJobToFirebase(JobLS job, String email) {
         FirebaseDatabase database = FirebaseDatabase.getInstance("https://dijob-aafbe-default-rtdb.europe-west1.firebasedatabase.app");
@@ -323,7 +323,7 @@ public class HomeFragment extends Fragment implements JobAdapter.OnJobClickListe
         String emailKey = email.replace(".", ",");
         Log.d("EMAIL", emailKey);
 
-        // Создаем HashMap для хранения информации о работе
+        // создаем HashMap для хранения информации о работе
         Map<String, Object> jobData = new HashMap<>();
         jobData.put("job_id", job.getJob_id());
         jobData.put("job_apply_link", job.getJob_apply_link());
@@ -336,10 +336,10 @@ public class HomeFragment extends Fragment implements JobAdapter.OnJobClickListe
         jobData.put("employer_logo", job.getEmployer_logo());
         jobData.put("job_is_remote", job.isJob_is_remote());
 
-        // Логи для отладки
+        // логи для отладки
         Log.d("FirebaseJOB", "Job data: " + jobData.toString());
 
-        // Сохраняем информацию о работе под job_id
+        // сохраняю информацию о работе под job_id
         usersRef.child(emailKey).child(job.getJob_id()).setValue(jobData)
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
