@@ -6,6 +6,7 @@ import org.json.JSONObject;
 
 import java.util.Date;
 
+// Все поля для вакансий в JSearch апи
 public class JobLS {
     private String employer_name;
     private String employer_logo;

@@ -82,6 +82,15 @@
     <string name="reauthenticated">Пользователь повторно авторизован с новым паролем</string>
     <string name="ERreauthenticated">Не удалось выполнить повторную аутентификацию с новым паролем</string>
     <string name="ERpass">Ошибка обновления пароля</string>
+    <string name="ONsaved">Профиль успешно сохранен</string>
+    <string name="ERsaved">Ошибка сохранения профиля</string>
+    <string name="ERGettingDataProf">Ошибка получения данных профиль пуст</string>
+    <string name="ERGettingData">Ошибка получения данных</string>
+    <string name="ERUploadImg">Ошибка загрузки фото</string>
+    <string name="ERUserProfile">userProfile пустой</string>
+    <string name="ERPermission">Разрешение отклонено</string>
 
+    <string name="lastPage">Это последняя страница</string>
+    <string name="firstPage">Это первая страница</string>
 
 </resources>

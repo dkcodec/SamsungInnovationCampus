@@ -25,6 +25,7 @@ public class AboutFragment extends Fragment {
         inst = view.findViewById(R.id.inst);
         website = view.findViewById(R.id.website);
 
+        // работа с кнопками контактов
         inst.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

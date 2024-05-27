@@ -127,14 +127,6 @@ public class HomeFragment extends Fragment implements JobAdapter.OnJobClickListe
         searchInput = view.findViewById(R.id.search_input);
         buttonSearch = view.findViewById(R.id.search_button);
 
-//        // для проверки карточки в ресайкл вью
-//        recyclerView.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Log.d("RecyclerView", "Clicked");
-//            }
-//        });
-
         recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
 
         recyclerView.setHasFixedSize(true);
@@ -167,7 +159,7 @@ public class HomeFragment extends Fragment implements JobAdapter.OnJobClickListe
                     pageNumber.setText(String.valueOf(page));
                     getJobs();
                 } else {
-                    Toast.makeText(mContext, "This is the first page", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(mContext, String.valueOf(R.string.firstPage), Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -181,7 +173,7 @@ public class HomeFragment extends Fragment implements JobAdapter.OnJobClickListe
                     pageNumber.setText(String.valueOf(page));
                     getJobs();
                 } else {
-                    Toast.makeText(mContext, "This is the last page", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(mContext, String.valueOf(R.string.lastPage), Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -259,7 +251,7 @@ public class HomeFragment extends Fragment implements JobAdapter.OnJobClickListe
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         Log.e("VOLLEY ERROR: ", error.getMessage());  // Log Volley error
-                        Toast.makeText(mContext, "Fail to get data..", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(mContext, String.valueOf(R.string.ERGettingData), Toast.LENGTH_SHORT).show();
                         // при ошибке тоже скрываю
                         progressBar.setVisibility(View.GONE);
                     }
@@ -267,7 +259,7 @@ public class HomeFragment extends Fragment implements JobAdapter.OnJobClickListe
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String, String> headers = new HashMap<>();
-                headers.put("X-RapidAPI-Key", "f5b7ad29aemshd54e3b82f28e666p13f679jsn053d129bc9de");
+                headers.put("X-RapidAPI-Key", "de52d40859msh0a3d49d57b118a2p11ecc9jsnea162425407f");
                 headers.put("X-RapidAPI-Host", "jsearch.p.rapidapi.com");
                 return headers;
             }
@@ -285,7 +277,6 @@ public class HomeFragment extends Fragment implements JobAdapter.OnJobClickListe
 
         JobDetailsFragment fragment = new JobDetailsFragment();
 
-        Log.d("JobAdapter", "onJobClick: Starting...");
 
         // Создал Bundle для передачи данных в новый фрагмент
         Bundle bundle = new Bundle();
@@ -309,9 +300,6 @@ public class HomeFragment extends Fragment implements JobAdapter.OnJobClickListe
                 .replace(((ViewGroup)getView().getParent()).getId(), fragment)
                 .addToBackStack(null)
                 .commit();
-
-
-        Log.d("JobAdapter", "onJobClick: Fragment replaced successfully.");
     }
 
     // сохранение данных для истории в FireBase 2ая база данных
@@ -323,7 +311,7 @@ public class HomeFragment extends Fragment implements JobAdapter.OnJobClickListe
         String emailKey = email.replace(".", ",");
         Log.d("EMAIL", emailKey);
 
-        // создаем HashMap для хранения информации о работе
+        // создаю HashMap для хранения информации о работе
         Map<String, Object> jobData = new HashMap<>();
         jobData.put("job_id", job.getJob_id());
         jobData.put("job_apply_link", job.getJob_apply_link());
@@ -335,9 +323,6 @@ public class HomeFragment extends Fragment implements JobAdapter.OnJobClickListe
         jobData.put("job_description", job.getJob_description());
         jobData.put("employer_logo", job.getEmployer_logo());
         jobData.put("job_is_remote", job.isJob_is_remote());
-
-        // логи для отладки
-        Log.d("FirebaseJOB", "Job data: " + jobData.toString());
 
         // сохраняю информацию о работе под job_id
         usersRef.child(emailKey).child(job.getJob_id()).setValue(jobData)

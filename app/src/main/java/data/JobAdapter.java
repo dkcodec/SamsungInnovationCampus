@@ -20,6 +20,7 @@ import java.util.ArrayList;
 
 import model.JobLS;
 
+// класические адаптеры, которые необходимы для взамодействия с recyclerview
 public class JobAdapter extends RecyclerView.Adapter<JobAdapter.JobsViewHolder> {
     private Context context;
     private ArrayList<JobLS> jobs;

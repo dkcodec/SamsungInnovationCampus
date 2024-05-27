@@ -79,5 +79,15 @@
     <string name="reauthenticated">User reauthenticated with new password</string>
     <string name="ERreauthenticated">Failed to reauthenticate with new password</string>
     <string name="ERpass">Error updating password</string>
+    <string name="ONsaved">Profile saved successfully</string>
+    <string name="ERsaved">Failed to save profile</string>
+    <string name="ERGettingDataProf">Error getting data profile is empty</string>
+    <string name="ERGettingData">Error getting data</string>
+    <string name="ERUploadImg">Failed to upload image</string>
+    <string name="ERUserProfile">userProfile is null</string>
+    <string name="ERPermission">Permission Denied</string>
+
+    <string name="lastPage">This is the last page</string>
+    <string name="firstPage">This is the first page</string>
 
 </resources>
