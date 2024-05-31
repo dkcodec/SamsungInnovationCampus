@@ -48,7 +48,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 import model.JobLS;
 import model.ProfileLS;
 
-public class ProfileFragment extends Fragment {
+public class    ProfileFragment extends Fragment {
     // -------- коды для открытие галереи и сохранения ------
     private static final int GALLERY_REQUEST_CODE = 1001;
     private static final int STORAGE_PERMISSION_CODE = 1002;
@@ -71,7 +71,6 @@ public class ProfileFragment extends Fragment {
     private DatabaseReference userRef = database.getReference("users");
     private String emailKey = String.valueOf(user.getEmail()).replace(".", ",");
     private ProfileLS userProfile;
-
 
     @Override
     public void onAttach(@NonNull Context context) {

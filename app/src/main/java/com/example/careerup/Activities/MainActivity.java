@@ -18,6 +18,8 @@ import com.example.careerup.Fragments.HomeFragment;
 import com.example.careerup.Fragments.ObservedFragment;
 import com.example.careerup.Fragments.ProfileFragment;
 import com.example.careerup.R;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -25,6 +27,11 @@ import androidx.annotation.NonNull;
 import androidx.core.view.GravityCompat;
 
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
+import model.ProfileLS;
 
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
@@ -34,6 +41,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     FirebaseUser user;
     // -------------Меню-------------
     private DrawerLayout drawerLayout;
+
+    // ----------- БД ----------------
+    private FirebaseDatabase database = FirebaseDatabase.getInstance("https://dijob-aafbe.firebaseio.com");
+    private DatabaseReference userRef = database.getReference("users");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +59,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         // считаваю авторизован пользовтель или нет
         user = auth.getCurrentUser();
 
+        String emailKey = String.valueOf(user.getEmail()).replace(".", ",");
         // если не авторизован -> переход на логин
         if(user == null){
             Intent intent = new Intent(getApplicationContext(), Login.class);
@@ -67,7 +79,25 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         View headerView = navigationView.getHeaderView(0);
         userName = headerView.findViewById(R.id.userN);
 
-        userName.setText(user.getEmail());
+
+        userRef.child(emailKey).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+                                                                @Override
+                                                                public void onComplete(@NonNull Task<DataSnapshot> task) {
+                                                                    if (task.isSuccessful()) {
+                                                                        DataSnapshot dataSnapshot = task.getResult();
+                                                                        if (dataSnapshot != null && dataSnapshot.exists()) {
+                                                                            ProfileLS profile = dataSnapshot.getValue(ProfileLS.class);
+                                                                            if (profile != null) {
+                                                                                userName.setText(profile.getProfile_name());
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                }
+                                                            } );
+
+        if (userName.getText().length() == 0) {
+            userName.setText(user.getEmail());
+        }
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.open_nav, R.string.close_nav);
         drawerLayout.addDrawerListener(toggle);
