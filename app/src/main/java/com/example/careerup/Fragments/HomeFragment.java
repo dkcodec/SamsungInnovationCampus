@@ -259,7 +259,7 @@ public class HomeFragment extends Fragment implements JobAdapter.OnJobClickListe
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String, String> headers = new HashMap<>();
-                headers.put("X-RapidAPI-Key", "de52d40859msh0a3d49d57b118a2p11ecc9jsnea162425407f");
+                headers.put("X-RapidAPI-Key", "dce0f7fdd8msh5d7766376aa5b8fp1618abjsnb4d000b11660");
                 headers.put("X-RapidAPI-Host", "jsearch.p.rapidapi.com");
                 return headers;
             }
