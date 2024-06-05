@@ -159,7 +159,7 @@ public class HomeFragment extends Fragment implements JobAdapter.OnJobClickListe
                     pageNumber.setText(String.valueOf(page));
                     getJobs();
                 } else {
-                    Toast.makeText(mContext, String.valueOf(R.string.firstPage), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(mContext, R.string.firstPage, Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -173,7 +173,7 @@ public class HomeFragment extends Fragment implements JobAdapter.OnJobClickListe
                     pageNumber.setText(String.valueOf(page));
                     getJobs();
                 } else {
-                    Toast.makeText(mContext, String.valueOf(R.string.lastPage), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(mContext, R.string.lastPage, Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -251,7 +251,7 @@ public class HomeFragment extends Fragment implements JobAdapter.OnJobClickListe
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         Log.e("VOLLEY ERROR: ", error.getMessage());  // Log Volley error
-                        Toast.makeText(mContext, String.valueOf(R.string.ERGettingData), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(mContext, R.string.ERGettingData, Toast.LENGTH_SHORT).show();
                         // при ошибке тоже скрываю
                         progressBar.setVisibility(View.GONE);
                     }

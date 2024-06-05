@@ -43,16 +43,15 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 import de.hdodenhof.circleimageview.CircleImageView;
-import model.JobLS;
 import model.ProfileLS;
 
 public class    ProfileFragment extends Fragment {
     // -------- коды для открытие галереи и сохранения ------
     private static final int GALLERY_REQUEST_CODE = 1001;
     private static final int STORAGE_PERMISSION_CODE = 1002;
-    private StorageReference storageRef;
 
     private Context mContext;
     private TextView emailData;
@@ -61,15 +60,17 @@ public class    ProfileFragment extends Fragment {
     private AppCompatButton edit;
     private boolean isSave = true;
 
-    // --------- FireBase ---------
-    private FirebaseAuth mAuth;
-    private FirebaseUser currentUser;
-
     // --------- RealTimeDB ----------
-    private FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-    private FirebaseDatabase database = FirebaseDatabase.getInstance("https://dijob-aafbe.firebaseio.com");
-    private DatabaseReference userRef = database.getReference("users");
-    private String emailKey = String.valueOf(user.getEmail()).replace(".", ",");
+    private final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+    private final FirebaseDatabase database = FirebaseDatabase.getInstance("https://dijob-aafbe.firebaseio.com");
+    private final DatabaseReference userRef = database.getReference("users");
+    private final String emailKey;
+
+    {
+        assert user != null;
+        emailKey = String.valueOf(user.getEmail()).replace(".", ",");
+    }
+
     private ProfileLS userProfile;
 
     @Override
@@ -81,8 +82,6 @@ public class    ProfileFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         FirebaseApp.initializeApp(mContext);
-        mAuth = FirebaseAuth.getInstance();
-        currentUser = mAuth.getCurrentUser();
     }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -109,6 +108,7 @@ public class    ProfileFragment extends Fragment {
         setFieldsEditable(false);
 
         // установил почту из firebase
+        assert user != null;
         emailData.setText(user.getEmail());
 
 
@@ -157,7 +157,7 @@ public class    ProfileFragment extends Fragment {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 openGallery();
             } else {
-                Toast.makeText(mContext, String.valueOf(R.string.ERPermission), Toast.LENGTH_SHORT).show();
+                Toast.makeText(mContext, R.string.ERPermission, Toast.LENGTH_SHORT).show();
             }
         }
     }
@@ -178,7 +178,7 @@ public class    ProfileFragment extends Fragment {
     // конверт и утсановка картинки в URI а от туда уже в Cloud Storage
     private void uploadImageToFirebase(Uri imageUri) {
         FirebaseStorage storage = FirebaseStorage.getInstance("gs://dijob-aafbe.appspot.com");
-        storageRef = storage.getReference();
+        StorageReference storageRef = storage.getReference();
 
         StorageReference fileRef = storageRef.child(emailKey + ".jpg");
         fileRef.putFile(imageUri)
@@ -204,7 +204,7 @@ public class    ProfileFragment extends Fragment {
                         });
                     }
                 }).addOnFailureListener(e -> {
-                    Toast.makeText(mContext, String.valueOf(R.string.ERUploadImg), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(mContext, R.string.ERUploadImg, Toast.LENGTH_SHORT).show();
                 });
     }
 
@@ -218,6 +218,7 @@ public class    ProfileFragment extends Fragment {
                     if (dataSnapshot != null && dataSnapshot.exists()) {
                         ProfileLS profile = dataSnapshot.getValue(ProfileLS.class);
                         if (profile != null) {
+                            assert user != null;
                             emailData.setText(user.getEmail());
                             addressData.setText(profile.getProfile_address());
                             mobileData.setText(profile.getProfile_mobile());
@@ -273,7 +274,7 @@ public class    ProfileFragment extends Fragment {
                             if (task.isSuccessful()) {
                                 // Если пароль успешно обновлен
                                 // Переаутентификация пользователя с новым паролем
-                                AuthCredential credential = EmailAuthProvider.getCredential(user.getEmail(), newPassword);
+                                AuthCredential credential = EmailAuthProvider.getCredential(Objects.requireNonNull(user.getEmail()), newPassword);
                                 user.reauthenticate(credential)
                                         .addOnCompleteListener(new OnCompleteListener<Void>() {
                                             @Override
@@ -281,18 +282,18 @@ public class    ProfileFragment extends Fragment {
                                                 if (reauthTask.isSuccessful()) {
                                                     // Переаутентификация прла ЛОГ + ТОСТ
                                                     Log.d("Reauthentication", String.valueOf(R.string.reauthenticated));
-                                                    Toast.makeText(getContext(), String.valueOf(R.string.reauthenticated), Toast.LENGTH_SHORT).show();
+                                                    Toast.makeText(getContext(), R.string.reauthenticated, Toast.LENGTH_SHORT).show();
                                                 } else {
                                                     // Ошибка переаутентификации
                                                     Log.w("Reauthentication", String.valueOf(R.string.ERreauthenticated), reauthTask.getException());
-                                                    Toast.makeText(getContext(), String.valueOf(R.string.ERreauthenticated), Toast.LENGTH_SHORT).show();
+                                                    Toast.makeText(getContext(), R.string.ERreauthenticated, Toast.LENGTH_SHORT).show();
                                                 }
                                             }
                                         });
                             } else {
                                 // Ошибка при обновлении пароля
                                 Log.w("UpdatePassword", String.valueOf(R.string.ERpass), task.getException());
-                                Toast.makeText(getContext(), String.valueOf(R.string.ERpass), Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getContext(), R.string.ERpass, Toast.LENGTH_SHORT).show();
                             }
                         }
                     });
@@ -305,6 +306,7 @@ public class    ProfileFragment extends Fragment {
             userProfile = new ProfileLS();
         }
 
+        assert user != null;
         userProfile.setProfile_email(user.getEmail());
         userProfile.setProfile_address(String.valueOf(addressData.getText()));
         userProfile.setProfile_mobile(String.valueOf(mobileData.getText()));

@@ -30,6 +30,7 @@ import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import model.ProfileLS;
 
@@ -37,14 +38,14 @@ import model.ProfileLS;
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
     // -----------Авторизация-----------
     FirebaseAuth auth;
-    TextView logOut, userName;
+    TextView userName;
     FirebaseUser user;
     // -------------Меню-------------
     private DrawerLayout drawerLayout;
 
     // ----------- БД ----------------
-    private FirebaseDatabase database = FirebaseDatabase.getInstance("https://dijob-aafbe.firebaseio.com");
-    private DatabaseReference userRef = database.getReference("users");
+    private final FirebaseDatabase database = FirebaseDatabase.getInstance("https://dijob-aafbe.firebaseio.com");
+    private final DatabaseReference userRef = database.getReference("users");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,7 +60,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         // считаваю авторизован пользовтель или нет
         user = auth.getCurrentUser();
 
+        assert user != null;
         String emailKey = String.valueOf(user.getEmail()).replace(".", ",");
+
         // если не авторизован -> переход на логин
         if(user == null){
             Intent intent = new Intent(getApplicationContext(), Login.class);
@@ -68,7 +71,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
 
         // -------------------Меню--------------------
-        Toolbar toolbar = findViewById(R.id.Toolbar); //Ignore red line errors
+        Toolbar toolbar = findViewById(R.id.Toolbar);
         setSupportActionBar(toolbar);
 
         drawerLayout = findViewById(R.id.drawer_layout);
@@ -79,6 +82,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         View headerView = navigationView.getHeaderView(0);
         userName = headerView.findViewById(R.id.userN);
 
+        userName.setText(user.getEmail());
 
         userRef.child(emailKey).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
                                                                 @Override
@@ -95,10 +99,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                                                                 }
                                                             } );
 
-        if (userName.getText().length() == 0) {
-            userName.setText(user.getEmail());
-        }
-
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.open_nav, R.string.close_nav);
         drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
@@ -108,6 +108,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             navigationView.setCheckedItem(R.id.vacancies);
         }
     }
+
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();

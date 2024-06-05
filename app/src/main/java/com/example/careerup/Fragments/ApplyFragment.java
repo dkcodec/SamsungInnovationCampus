@@ -16,9 +16,6 @@ import com.example.careerup.R;
 
 public class ApplyFragment extends Fragment {
 
-    // для WebView
-    private WebView webView;
-
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -32,12 +29,15 @@ public class ApplyFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_apply, container, false);
 
         // Получаю url из фрагмента с деталями
+        assert getArguments() != null;
         String url = getArguments().getString("url");
 
         // инициализация webview
-        webView = view.findViewById(R.id.web_view);
+        // для WebView
+        WebView webView = view.findViewById(R.id.web_view);
         webView.setWebViewClient(new WebViewClient());
         webView.getSettings().setJavaScriptEnabled(true);
+        assert url != null;
         webView.loadUrl(url);
 
         return view;

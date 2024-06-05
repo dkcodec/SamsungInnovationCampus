@@ -15,15 +15,13 @@ import com.example.careerup.R;
 
 public class AboutFragment extends Fragment {
 
-    private Button inst, website;
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_about, container, false);
 
-        inst = view.findViewById(R.id.inst);
-        website = view.findViewById(R.id.website);
+        Button inst = view.findViewById(R.id.inst);
+        Button website = view.findViewById(R.id.website);
 
         // работа с кнопками контактов
         inst.setOnClickListener(new View.OnClickListener() {

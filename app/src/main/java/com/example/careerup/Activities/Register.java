@@ -21,6 +21,8 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import java.util.Objects;
+
 public class Register extends AppCompatActivity {
 
     TextInputEditText editTextEmail, editTextPassword;
@@ -73,8 +75,8 @@ public class Register extends AppCompatActivity {
                 progressBar.setVisibility(View.VISIBLE);
                 String email, password;
 //                парсинг текста с полей в строку
-                email = editTextEmail.getText().toString();
-                password = editTextPassword.getText().toString();
+                email = Objects.requireNonNull(editTextEmail.getText()).toString();
+                password = Objects.requireNonNull(editTextPassword.getText()).toString();
 //              Уведомления для пользователей если НЕ ввели почту
                 if (TextUtils.isEmpty(email)) {
                     Toast.makeText(Register.this, "Enter email", Toast.LENGTH_LONG).show();
